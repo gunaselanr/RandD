@@ -1,0 +1,303 @@
+﻿@model MVCSampleGrid.Models.Order
+
+@{
+    ViewBag.Title = ViewBag.Title;
+}
+
+<div class="title"><h2>@ViewBag.Title</h2></div>
+@*<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.8.24.js"></script>
+
+    <link href="~/Content/DataTables/css/jquery.dataTables.css" rel="stylesheet" />
+    <script src="~/Scripts/json2.js"></script>
+    <script src="~/Scripts/DataTables/jquery.dataTables.js"></script>*@
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        // here i have used datatables.js (jQuery Data Table)
+        $('.tbl').dataTable({
+            "bLengthChange": false,
+            "bFilter": false,
+            "bSort": true,
+            "bInfo": false
+        });
+
+        var oTable = $('.tbl').dataTable();
+
+        $('#OrderDate').datepicker({
+            changeYear: true,
+            changeMonth: true,
+            minDate: 0,
+            dateformat: "MM/dd/yyyy"
+        });
+
+        $('.numeric').keydown(function (e) {
+            var key = e.charCode || e.keyCode;
+            // allow backspace, tab, delete, enter, arrows, numbers and keypad numbers ONLY
+            // home, end, period, and numpad decimal
+            return (
+                key == 8 ||
+                key == 9 ||
+                key == 13 ||
+                key == 46 ||
+                key == 110 ||
+                key == 190 ||
+                (key >= 35 && key <= 40) ||
+                (key >= 48 && key <= 57) ||
+                (key >= 96 && key <= 105));
+        });
+
+        $('#DrpProduct').change(function () {
+            var productId = Number($(this).val());
+            $.ajax({
+                url: '/Order/GetProductUnitPrice',
+                data: JSON.stringify({ "productId": productId }),
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'JSON',
+                success: function (result) {
+                    if (result.UnitPrice) {
+                        $('#UnitPrice').val(result.UnitPrice.toFixed(2).toString());
+                    }
+                },
+                error: function (result) {
+
+                }
+            });
+        });
+    });
+
+    function CalculateAmount() {
+        var unitPrice = Number($('#UnitPrice').val()).toFixed(2);
+        var quantity = Number($('#Quantity').val());
+        var amount = (unitPrice * quantity).toFixed(2);
+        $('#Amount').val(amount);
+    }
+
+    // this function is used to add item to list table
+    function Add() {
+        // Adding item to table
+        var selectedProduct = $('#DrpProduct option:selected').text();
+        var selectedProductValue = $('#DrpProduct').val();
+        var unitPrice = Number($('#UnitPrice').val()).toFixed(2).toString();
+        var quantity = $('#Quantity').val();
+        var amount = Number($('#Amount').val()).toFixed(2).toString();
+        $('.tbl').dataTable().fnAddData([0, selectedProductValue, selectedProduct, unitPrice, quantity, amount]);
+
+        // Making Editable text empty
+        $('#UnitPrice').val("");
+        $('#Quantity').val("");
+        $('#Amount').val("");
+        $('#DrpProduct').val(-1);
+    }
+
+
+    function SaveOrders() {
+        // Creating SalesOrderItems Json Object
+        var salesOrderItems = { Id: 0, OrderId: 0, ProductId: "", UnitPrice: "", Quantity: "", Amount: "" };
+
+        // Creating SalesOrder Json Object
+        var salesOrder = { Id: 0, OrderDate: "", OrderNumber: "", CustomerId: "", TotalAmount: "", OrderItems: [] };
+
+        var totalAmount = 0;
+        debugger;
+        // Set SalesOrder Values
+        salesOrder.Id = $('#Id').val();
+        salesOrder.OrderDate = $('#OrderDate').val();
+        salesOrder.OrderNumber = $('#OrderNumber').val();
+        // salesOrder.CustomerName = $('#CustomerId option:selected').text();
+        salesOrder.CustomerId = $('#CustomerId').val();
+
+        // getting datatable values
+        var oTable = $('.tbl').dataTable().fnGetData();
+
+        for (var i = 0; i < oTable.length; i++) {
+            if (Number($('#Id').val()) > 0) {
+                salesOrderItems.OrderId = $('#Id').val();
+            }
+            else {
+                salesOrderItems.OrderId = 0;
+            }
+
+            salesOrderItems.Id = oTable[i][0];
+            salesOrderItems.ProductId = oTable[i][1];
+            salesOrderItems.UnitPrice = oTable[i][3];
+            salesOrderItems.Quantity = oTable[i][4];
+            salesOrderItems.Amount = oTable[i][5];
+
+            totalAmount = totalAmount + Number(salesOrderItems.Amount);
+
+            salesOrder.OrderItems.push(salesOrderItems);
+            salesOrderItems = { Id: 0, OrderId: 0, ProductId: "", UnitPrice: "", Quantity: "", Amount: "" };
+        }
+
+        $('#TotalAmount').val(totalAmount.toFixed(2));
+        salesOrder.TotalAmount = totalAmount.toFixed(2);
+
+        debugger;
+        $.ajax({
+            url: '/Order/Edit',
+            data: JSON.stringify(salesOrder),
+            type: 'POST',
+            contentType: 'application/json',
+            success: function (result) {
+                if (result.salesOrderId > 0) {
+                    window.location.href = '/Order/Index';
+                }
+                else {
+                    alert("Error: Order not saved");
+                    return false;
+                }
+            },
+            error: function (result) {
+                alert("Error: " + result);
+                return false;
+            }
+        })
+
+    }
+
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Order</legend>
+
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.OrderDate)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.OrderDate)
+            @Html.ValidationMessageFor(model => model.OrderDate)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.OrderNumber)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.OrderNumber, new { maxlength = 10 })
+            @Html.ValidationMessageFor(model => model.OrderNumber)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CustomerId)
+        </div>
+        <div class="editor-field">
+            @*@Html.EditorFor(model => model.CustomerId)*@
+            @Html.DropDownListFor(model => model.CustomerId, ViewData["Customers"] as List<SelectListItem>, "Select Customer", new { })
+            @Html.ValidationMessageFor(model => model.CustomerId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.TotalAmount)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.TotalAmount, new { Readonly = "true" })
+            @Html.ValidationMessageFor(model => model.TotalAmount)
+        </div>
+
+
+    </fieldset>
+
+    <br />
+    <div style="width:100%">
+        <label>Add Item</label>
+        @*<div style="display:none;"></div>
+            <div style="display:none;"></div>*@
+        <div style="float:left;width:30%">
+            <div class="editor-label">
+                <label>Product Name: </label>
+            </div>
+            <div class="editor-field">
+                @Html.DropDownList("DrpProduct", ViewData["Products"] as List<SelectListItem>, "Select Product", new { Id = "DrpProduct", @style = "height:27px;" })
+            </div>
+        </div>
+        <div style="float:left;width:10%">
+            <div class="editor-label">
+                <label>Unit Price: </label>
+            </div>
+            <div class="editor-field">
+                @Html.TextBox("UnitPrice", "", new { @style = "width:50px;height:27px;margin: 0px;", onkeyup = "CalculateAmount();", @class = "numeric", maxlength = 5 })
+            </div>
+        </div>
+        <div style="float:left;width:10%">
+            <div class="editor-label">
+                <label>Quantity: </label>
+            </div>
+            <div class="editor-field">
+                @Html.TextBox("Quantity", "", new { @style = "width:50px;height:27px;margin: 0px;", onkeyup = "CalculateAmount();", @class = "numeric", maxLength = 5 })
+            </div>
+        </div>
+        <div style="float:left;width:20%">
+            <div class="editor-label">
+                <label>Amount: </label>
+            </div>
+            <div class="editor-field">
+                @Html.TextBox("Amount", "", new { @style = "width:100px;height:27px;margin: 0px;", Readonly = "true", @class = "numeric" })
+            </div>
+        </div>
+        <div style="float:left;width:20%; padding-top:17px;">
+            <div class="editor-field">
+                <input type="button" name="BtnAdd" id="BtnAdd" value="Add Item" onclick="Add()"/>
+            </div>
+        </div>
+        <br />
+        <br />
+
+
+
+        <table id="tbl" class="tbl table" style="float:left; border:1px solid #808080" cellpadding="5" cellspacing="5">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th style="text-align:center;">Product Name</th>
+                    <th style="text-align:center;">Unit Price</th>
+                    <th style="text-align:center;">Quantity</th>
+                    <th style="text-align:center;">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.OrderItems != null)
+                {
+                    foreach (var item in Model.OrderItems)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.ProductId</td>
+                            <td>
+                                @item.Product.ProductName
+                            </td>
+                            <td style="text-align:right;">@item.UnitPrice</td>
+                            <td style="text-align:right;">@item.Quantity</td>
+                            <td style="text-align:right;">@item.Amount</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+    <p>
+        <input type="button" value="Save" style="float:left;" onclick="SaveOrders();" />
+    </p>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
