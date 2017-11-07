@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelperClasses", "HelperClasses\HelperClasses.csproj", "{347429A9-1C16-48EA-A8C1-70DAAC78DB51}"
 EndProject
@@ -19,10 +19,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVCSampleGrid.Business", "M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVCSampleGrid.Data", "MVCSampleGrid.Data\MVCSampleGrid.Data.csproj", "{DBE8A58A-920B-471A-A57D-10733E1BA7EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleWebApplication", "..\MVCSampleGrid\SampleWebApplication\SampleWebApplication.csproj", "{CBAADA3B-F0FD-40A3-A23A-DAAA73F12B52}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utilities", "..\MVCSampleGrid\Utilities\Utilities.csproj", "{756B3486-2910-4A61-88C4-95A74A2653E5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVCSampleGrid", "MVCSampleGrid\MVCSampleGrid.csproj", "{7B11F830-1DA1-45E9-BE58-1F8D37D6BF6B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleAngularJs", "SampleAngularJs\SampleAngularJs.csproj", "{A7BFC66F-0C9D-42CC-9C6E-9D597B65B703}"
@@ -31,6 +27,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{67CE
 	ProjectSection(SolutionItems) = preProject
 		C:\Users\VISHNU\Desktop\angular.min.js = C:\Users\VISHNU\Desktop\angular.min.js
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleWebApplication", "SampleWebApplication\SampleWebApplication.csproj", "{CBAADA3B-F0FD-40A3-A23A-DAAA73F12B52}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utilities", "Utilities\Utilities.csproj", "{756B3486-2910-4A61-88C4-95A74A2653E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -70,14 +70,6 @@ Global
 		{DBE8A58A-920B-471A-A57D-10733E1BA7EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DBE8A58A-920B-471A-A57D-10733E1BA7EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DBE8A58A-920B-471A-A57D-10733E1BA7EE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CBAADA3B-F0FD-40A3-A23A-DAAA73F12B52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CBAADA3B-F0FD-40A3-A23A-DAAA73F12B52}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CBAADA3B-F0FD-40A3-A23A-DAAA73F12B52}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CBAADA3B-F0FD-40A3-A23A-DAAA73F12B52}.Release|Any CPU.Build.0 = Release|Any CPU
-		{756B3486-2910-4A61-88C4-95A74A2653E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{756B3486-2910-4A61-88C4-95A74A2653E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{756B3486-2910-4A61-88C4-95A74A2653E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{756B3486-2910-4A61-88C4-95A74A2653E5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7B11F830-1DA1-45E9-BE58-1F8D37D6BF6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7B11F830-1DA1-45E9-BE58-1F8D37D6BF6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B11F830-1DA1-45E9-BE58-1F8D37D6BF6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -86,6 +78,14 @@ Global
 		{A7BFC66F-0C9D-42CC-9C6E-9D597B65B703}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7BFC66F-0C9D-42CC-9C6E-9D597B65B703}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7BFC66F-0C9D-42CC-9C6E-9D597B65B703}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBAADA3B-F0FD-40A3-A23A-DAAA73F12B52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBAADA3B-F0FD-40A3-A23A-DAAA73F12B52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBAADA3B-F0FD-40A3-A23A-DAAA73F12B52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBAADA3B-F0FD-40A3-A23A-DAAA73F12B52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{756B3486-2910-4A61-88C4-95A74A2653E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{756B3486-2910-4A61-88C4-95A74A2653E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{756B3486-2910-4A61-88C4-95A74A2653E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{756B3486-2910-4A61-88C4-95A74A2653E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
